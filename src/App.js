@@ -36,6 +36,16 @@ class App extends Component {
     this.handleGridRowsUpdated = this.handleGridRowsUpdated.bind(this);
     this.addRow = this.addRow.bind(this);
     this.handleFiles = this.handleFiles.bind(this);
+    this.convertToJson = this.convertToJson.bind(this);
+  }
+
+  convertToJson = csv => {
+    let csvjson = require('csvjson');
+    var options = {
+      delimiter : ',',
+      quote     : '"',
+    };
+    return csvjson.toObject(csv, options);
   }
 
   handleFiles = files => {
@@ -44,10 +54,18 @@ class App extends Component {
     
     reader.onloadend = (e) => {
       let result = reader.result;
-      console.log(result);
-      let array = result.split(',');
+      let data = this.convertToJson(result);
+
+      console.log(this.state.rows);
+      this.setState({rows: data});
+      console.log(data);
+      /*console.log(result);
+      let array = result.split('\n');
       console.log(array);
-  
+      array = array.map((arr) => {
+        return arr.split(',');
+      });
+      console.log(array);*/
     }
     reader.readAsText(files[0]);
   } 
