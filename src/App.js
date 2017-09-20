@@ -55,17 +55,15 @@ class App extends Component {
     reader.onloadend = (e) => {
       let result = reader.result;
       let data = this.convertToJson(result);
-
-      console.log(this.state.rows);
-      this.setState({rows: data});
-      console.log(data);
-      /*console.log(result);
-      let array = result.split('\n');
-      console.log(array);
-      array = array.map((arr) => {
-        return arr.split(',');
-      });
-      console.log(array);*/
+      let columns = [];
+      for(let key in data[0]){
+        columns.push({
+          key,
+          name: key,
+          editable:true,
+        });
+      }
+      this.setState({rows: data, columns});
     }
     reader.readAsText(files[0]);
   } 
